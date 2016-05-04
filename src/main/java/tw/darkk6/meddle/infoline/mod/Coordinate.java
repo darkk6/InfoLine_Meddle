@@ -103,9 +103,13 @@ public class Coordinate extends IModBase {
 	
 	public class CoordCfg implements IConfig{
 
-		public boolean isEnabled=true,useColor=true;
-		public String displayFormat="[{X}, {Y}, {Z}] §7[§c{F}§7]§r";
-		public String chatFormat="{X},{Y},{Z}";
+		private static final boolean DEFAULT_ENABLED=true,DEFAULT_USECOLOR=true;
+		private static final String DEFAULT_DISPLAY="[{X}, {Y}, {Z}] §7[§c{F}§7]§r";
+		private static final String DEFAULT_DISPLAYCHAT="{X}, {Y}, {Z}";
+		
+		private boolean isEnabled=DEFAULT_ENABLED,useColor=DEFAULT_USECOLOR;
+		private String displayFormat=DEFAULT_DISPLAY;
+		private String chatFormat=DEFAULT_DISPLAYCHAT;
 		
 		@Override
 		public boolean isEnabled() {
@@ -115,19 +119,19 @@ public class Coordinate extends IModBase {
 		@Override
 		public void update(ConfigFile cfg) {
 			isEnabled=((Boolean)cfg.get(ConfigFile.key(
-					MOD_CATALOG, "enableCoordMod", Boolean.valueOf(isEnabled),
+					MOD_CATALOG, "enableCoordMod", Boolean.valueOf(DEFAULT_ENABLED),
 					"使否顯示所在座標,TAG:{coordinate}"))).booleanValue();
 			
 			useColor=((Boolean)cfg.get(ConfigFile.key(
-					MOD_CATALOG, "useCoordColor", Boolean.valueOf(useColor),
+					MOD_CATALOG, "useCoordColor", Boolean.valueOf(DEFAULT_USECOLOR),
 					"Y 座標顏色提示礦物層"))).booleanValue();
 			
 			displayFormat=cfg.get(ConfigFile.key(
-					MOD_CATALOG, "coordDisplayFormat", displayFormat,
+					MOD_CATALOG, "coordDisplayFormat", DEFAULT_DISPLAY,
 					"顯示格式\n{F}:Facing,面向方向 ,{X}{Y}{Z}:Coordinate,座標"));
 			
 			chatFormat=cfg.get(ConfigFile.key(
-					MOD_CATALOG, "coordInChatFormat", chatFormat,
+					MOD_CATALOG, "coordInChatFormat", DEFAULT_DISPLAYCHAT,
 					"快速插入座標顯示格式"));
 		}
 		

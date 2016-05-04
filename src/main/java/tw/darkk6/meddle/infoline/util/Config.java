@@ -9,15 +9,21 @@ public class Config {
 	
 	public static Config instance;
 	
-	public static int position=0;//左上角，參考上面
-	public static int xOffset=5,yOffset=5,lineGap=0;
-	public static boolean isEnabled=true;
-	public static String displayString="{clock} {coordinate} {biome}{N}{light}";
+	private static final int DEFAULT_POS=0;
+	private static final int DEFAULT_XPOS=5,DEFAULT_YPOS=5,DEFAULT_GAP=0;
+	private static final boolean DEFAULT_ENABLED=true;
+	private static final String DEFAULT_DISPLAY="{clock} {coordinate} {light}{N}{biome}";
+	private static final int DEFALUTWIDTH=854,DEFALUTHEIGHT=480;
+	
+	public static int position=DEFAULT_POS;//左上角，參考上面
+	public static int xOffset=DEFAULT_XPOS,yOffset=DEFAULT_YPOS,lineGap=DEFAULT_GAP;
+	public static boolean isEnabled=DEFAULT_ENABLED;
+	public static String displayString=DEFAULT_DISPLAY;
 	
 	//=== internal ===
 	public static int[] defaultResolution;
-	private static int defalutWidth=854;
-	private static int defalutHeight=480;
+	private static int defalutWidth=DEFALUTWIDTH;
+	private static int defalutHeight=DEFALUTHEIGHT;
 	
 	private long lastModify=0L;
 	private File file;
@@ -42,42 +48,42 @@ public class Config {
 		cfg.load();
 		
 		isEnabled=((Boolean)cfg.get(ConfigFile.key(
-				"general", "enableInfoLine", Boolean.valueOf(isEnabled),
+				"general", "enableInfoLine", Boolean.valueOf(DEFAULT_ENABLED),
 				"啟用 InfoLine Mod"))).booleanValue();
 		
 		lineGap=((Integer)cfg.get(ConfigFile.key(
-				"general", "lineGap", Integer.valueOf(lineGap),
+				"general", "lineGap", Integer.valueOf(DEFAULT_GAP),
 				"多行顯示時的行距間隙"))
 				).intValue();
 		
 		if(lineGap>5 || lineGap<0) lineGap=0;
 		
 		position=((Integer)cfg.get(ConfigFile.key(
-				"general", "showPosition", Integer.valueOf(position),
+				"general", "showPosition", Integer.valueOf(DEFAULT_POS),
 				"顯示位置\nTOP_LEFT=0 , TOP_RIGHT=1 , BOTTOM_LEFT=2 , BOTTOM_RIGHT=3"))
 				).intValue();
 		
 		if(position<0 || position>3) position=0;
 		
 		xOffset=((Integer)cfg.get(ConfigFile.key(
-				"general", "OffsetX", Integer.valueOf(xOffset),
+				"general", "OffsetX", Integer.valueOf(DEFAULT_XPOS),
 				"與邊界的水平距離"))).intValue();
 		
 		yOffset=((Integer)cfg.get(ConfigFile.key(
-				"general", "OffsetY", Integer.valueOf(yOffset),
+				"general", "OffsetY", Integer.valueOf(DEFAULT_YPOS),
 				"與邊界的垂直距離"))).intValue();
 		
 		displayString=cfg.get(ConfigFile.key(
-				"general","displayString",displayString,
+				"general","displayString",DEFAULT_DISPLAY,
 				"顯示的文字樣板，使用{N}代表換行"));
 		
 		//====== Internal =======
 		defalutWidth=((Integer)cfg.get(ConfigFile.key(
-				"internal", "ScreenWidth", Integer.valueOf(defalutWidth),
+				"internal", "ScreenWidth", Integer.valueOf(DEFALUTWIDTH),
 				"無法取得視窗大小時，預設的視窗寬度"))).intValue();
 		
 		defalutHeight=((Integer)cfg.get(ConfigFile.key(
-				"internal", "ScreenHeight", Integer.valueOf(defalutHeight),
+				"internal", "ScreenHeight", Integer.valueOf(DEFALUTHEIGHT),
 				"無法取得視窗大小時，預設的視窗高度"))).intValue();
 		
 		if(defaultResolution==null) defaultResolution=new int[2];

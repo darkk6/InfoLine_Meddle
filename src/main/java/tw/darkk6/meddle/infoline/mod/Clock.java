@@ -78,22 +78,25 @@ public class Clock extends IModBase {
 	
 	public class ClockCfg implements IConfig{
 		
-		private boolean isEnabled=true,useColor=true;
-		private int clockMode=0;
+		private static final boolean DEFAULT_ENABLED=true,DEFAULT_USECOLOR=true;
+		private static final int DEFAULT_CLOCKMODE=0;
+		
+		private boolean isEnabled=DEFAULT_ENABLED,useColor=DEFAULT_USECOLOR;
+		private int clockMode=DEFAULT_CLOCKMODE;
 		
 		@Override
 		public void update(ConfigFile cfg){
 			
 			isEnabled=((Boolean)cfg.get(ConfigFile.key(
-					MOD_CATALOG, "enableColorMod", Boolean.valueOf(isEnabled),
+					MOD_CATALOG, "enableColorMod", Boolean.valueOf(DEFAULT_ENABLED),
 					"使否顯示現在時間,TAG:{clock}"))).booleanValue();
 			
 			useColor=((Boolean)cfg.get(ConfigFile.key(
-					MOD_CATALOG, "useClockColor", Boolean.valueOf(useColor),
+					MOD_CATALOG, "useClockColor", Boolean.valueOf(DEFAULT_USECOLOR),
 					"使用上色文字(晚上白天等顏色不同)"))).booleanValue();
 			
 			clockMode=((Integer)cfg.get(ConfigFile.key(
-					MOD_CATALOG, "showClockMode", Integer.valueOf(clockMode),
+					MOD_CATALOG, "showClockMode", Integer.valueOf(DEFAULT_CLOCKMODE),
 					"顯示方式\n0:Minecraft time , 1:Minecraft ticks , 2:Real time"))
 					).intValue();
 			

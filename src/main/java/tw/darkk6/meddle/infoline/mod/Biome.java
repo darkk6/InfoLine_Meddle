@@ -101,8 +101,11 @@ public class Biome extends IModBase {
 	
 	public class BiomeCfg implements IConfig{
 
-		public boolean isEnabled=true;
-		public String displayFormat="{B} - {T}";
+		private static final boolean DEFAULT_ENABLED=true;
+		private static final String DEFAULT_DISPLAY="{B} - {T}";
+		
+		private boolean isEnabled=DEFAULT_ENABLED;
+		private String displayFormat=DEFAULT_DISPLAY;
 		
 		@Override
 		public boolean isEnabled() {
@@ -112,11 +115,11 @@ public class Biome extends IModBase {
 		@Override
 		public void update(ConfigFile cfg) {
 			isEnabled=((Boolean)cfg.get(ConfigFile.key(
-					MOD_CATALOG, "enableBiomeMod", Boolean.valueOf(isEnabled),
+					MOD_CATALOG, "enableBiomeMod", Boolean.valueOf(DEFAULT_ENABLED),
 					"使否顯示生態環境資訊 ,TAG:{biome}"))).booleanValue();
 			
 			displayFormat=cfg.get(ConfigFile.key(
-					MOD_CATALOG, "biomeDisplayFormat", displayFormat,
+					MOD_CATALOG, "biomeDisplayFormat", DEFAULT_DISPLAY,
 					"顯示格式\n{B}:Biome Name,生態系名稱    {T}:Temperature,溫度"));
 			
 		}

@@ -105,8 +105,11 @@ public class Light extends IModBase {
 	}
 	
 	public class LightCfg implements IConfig{
-		public boolean isEnabled=true,useColor=true;
-		public String lightFormat="{B} [{S}]";
+		private static final boolean DEFAULT_ENABLED=true,DEFAULT_USECOLOR=true;
+		private static final String DEFAULT_DISPLAY="{B} [{S}]";
+		
+		private boolean isEnabled=DEFAULT_ENABLED,useColor=DEFAULT_USECOLOR;
+		private String lightFormat=DEFAULT_DISPLAY;
 		
 		@Override
 		public boolean isEnabled() {
@@ -116,15 +119,15 @@ public class Light extends IModBase {
 		@Override
 		public void update(ConfigFile cfg) {
 			isEnabled=((Boolean)cfg.get(ConfigFile.key(
-					MOD_CATALOG, "enableLightMod", Boolean.valueOf(isEnabled),
+					MOD_CATALOG, "enableLightMod", Boolean.valueOf(DEFAULT_ENABLED),
 					"使否顯示光源等級,TAG:{light}"))).booleanValue();
 			
 			useColor=((Boolean)cfg.get(ConfigFile.key(
-					MOD_CATALOG, "useLightColor", Boolean.valueOf(useColor),
+					MOD_CATALOG, "useLightColor", Boolean.valueOf(DEFAULT_USECOLOR),
 					"危險亮度提示(亮度於 7 以下)"))).booleanValue();
 			
 			lightFormat=cfg.get(ConfigFile.key(
-					MOD_CATALOG, "lightDisplayFormat", lightFormat,
+					MOD_CATALOG, "lightDisplayFormat", DEFAULT_DISPLAY,
 					"顯示格式 \n{B}:Block light,方塊亮度    {S}:Sky light,加上天空亮度"));
 		}
 	}
