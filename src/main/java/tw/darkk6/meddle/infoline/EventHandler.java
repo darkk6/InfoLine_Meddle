@@ -1,9 +1,10 @@
 package tw.darkk6.meddle.infoline;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Arrays;
+import java.util.List;
 
 import net.fybertech.meddleapi.MeddleClient.IKeyBindingState;
 import net.minecraft.client.Minecraft;
@@ -13,18 +14,20 @@ import net.minecraft.client.settings.KeyBinding;
 
 import org.lwjgl.input.Keyboard;
 
-import tw.darkk6.meddle.api.listener.IRenderTickListener;
+import tw.darkk6.meddle.api.listener.IRenderOverlayListener;
 import tw.darkk6.meddle.api.util.APILog;
+import tw.darkk6.meddle.infoline.mod.Coordinate;
+import tw.darkk6.meddle.infoline.mod.IModBase;
 import tw.darkk6.meddle.infoline.util.Config;
 import tw.darkk6.meddle.infoline.util.Reference;
 
-public class EventHandler implements IRenderTickListener,IKeyBindingState{
+public class EventHandler implements IRenderOverlayListener,IKeyBindingState{
 
 	@Override
-	public void onRenderTickStart(){}
+	public void onRenderOverlayStart(){}
 	
 	@Override
-	public void onRenderTickEnd(){
+	public void onRenderOverlayEnd(){
 		//繪製必須在 RenderEnd 才會生效
 		doInTick();
 	}
@@ -38,32 +41,57 @@ public class EventHandler implements IRenderTickListener,IKeyBindingState{
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void doInTick(){
-		/*
-		 * 	一天有 24*60 = 1440 分鐘
-		 * 	==> 24000/1440 => 16.6_ 為 1 分鐘
-		 * 	==> 24000/24 => 每 1000 為 1 小時
-		*/
-		//試著取得 theWorld.Q() => world.getWorldTime()
-		if(!Config.isEnable) return;
+		if(!Config.isEnabled) return;
 		if(Minecraft.getMinecraft()==null) return;
 		if(Minecraft.getMinecraft().theWorld==null) return;
-		String textToDraw;
-		if(Config.mode==Config.REAL_TIME){
-			SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
-			Date date = new Date();
-			textToDraw=dateFormat.format(date);
-		}else{
-			// m => currentScreen
-			GuiScreen gui=Minecraft.getMinecraft().m;
-			if(!drawOnGUI(gui)) return;//只畫在指定的 GUI 上
-			long time=Minecraft.getMinecraft().theWorld.Q();
-			textToDraw=getFormatedTimeString(time);
+		// m => currentScreen
+		GuiScreen gui=Minecraft.getMinecraft().m;
+		if(gui!=null && getGuiChatClass()!=null){
+			if(guiChatClass.isAssignableFrom(gui.getClass()))
+				checkAndInsertCoord(gui);
 		}
-		drawText(textToDraw);
+		
+		String textToDraw=Config.displayString;
+		//跑遍每一個 mod 取代要顯示的文字
+		for(IModBase mod:InfoLineMod.modList){
+			textToDraw=mod.parseResult(textToDraw);
+		}
+		String[] arr=textToDraw.split("\\{[Nn]\\}");
+		drawText(Arrays.asList(arr));
+	}
+
+	private Class classGuiTextField;
+	private Field inputfield;
+	private Method writeText;
+	private boolean hasF1Released=true;
+	@SuppressWarnings("unchecked")
+	private void checkAndInsertCoord(Object guiChatObj){
+		//檢查 F1 是否按下，將座標插入對話區
+		if(!hasF1Released){
+			if(!Keyboard.isKeyDown(Keyboard.KEY_F1)) hasF1Released=true;
+			return;
+		}
+		if(!Keyboard.isKeyDown(Keyboard.KEY_F1)) return;
+		hasF1Released=false;
+		// bda => GuiTextField
+		// .a => inputField [ in class GuiChat]
+		String xyz=Coordinate.instance.getCoordInChatStr();
+		if(xyz==null) return;
+		try{
+			if(inputfield==null) inputfield=guiChatClass.getDeclaredField("a");
+			if(classGuiTextField==null) classGuiTextField=Class.forName("bda");
+			if(writeText==null) writeText=classGuiTextField.getMethod("b",String.class);
+			inputfield.setAccessible(true);
+			Object iptField = inputfield.get(guiChatObj);
+			writeText.invoke(iptField,xyz);
+		}catch(Exception e){
+			APILog.error("Can not insert coordinate",Reference.LOG_TAG);
+		}
 	}
 	
-	private void drawText(String text){
+	private void drawText(List<String> strList){
 		//計算出出現位置
 		Minecraft mc = Minecraft.getMinecraft();
 		// k => fontRendererObj
@@ -71,62 +99,44 @@ public class EventHandler implements IRenderTickListener,IKeyBindingState{
 		int[] tmp=getScaledWidthHeight();
 		int width = tmp[0];
 		int height = tmp[1];
-		int strWidth = render.getStringWidth(text);
-		// a => FONT_HEIGHT
-		int strHeight = render.a;
-		int x = Config.xOffset, y = Config.yOffset;
-
-		//按照計算，直接使用 x , y 就是左上角，不用特別運算
-		switch(Config.position){
-			case Config.TOP_RIGHT:
-				x = width - strWidth - x;
-				break;
-			case Config.BOTTOM_LEFT:
-				y = height - strHeight - y;
-				break;
-			case Config.BOTTOM_RIGHT:
-				x = width - strWidth - x;
-				y = height - strHeight - y;
-				break;
-		}
-		// drawStringWithShadow or drawString => a
-		render.a(text, x, y, 0xFFFFFFFF, true);
-	}
-	
-	private String getFormatedTimeString(long time){
-		// Config.REAL_TIME 已經判斷過了所以不需要
-		time %= 24000;
-		int hour = (int)time / 1000;
-		int min = (int)Math.floor((time % 1000)/(50f/3f));
-		hour=(hour+6) % 24;
-		String formatedTime=String.format("%02d:%02d",hour,min);
-		if(!Config.useColor)
-			return Config.mode==Config.MC_TIME ? formatedTime : String.valueOf(time);
 		
-		StringBuilder show=new StringBuilder();
-		//晚上:GRAY , 黃昏/清晨:GOLD , 白天 : YELLOW
-		if(time>=13187L && time<23600L) show.append(APILog.TextFormatting.GRAY);
-		else if( time<12540L ) show.append(APILog.TextFormatting.YELLOW);
-		else show.append(APILog.TextFormatting.GOLD);
-		show.append(Config.mode==Config.MC_TIME ? formatedTime : String.valueOf(time));
-		show.append(APILog.TextFormatting.RESET);
-		return show.toString();
+		int lines=strList.size();
+		int idx=0;
+		for(String text:strList){
+			int strWidth = render.getStringWidth(text);
+			// a => FONT_HEIGHT
+			int strHeight = render.a;
+			int x = Config.xOffset, y = Config.yOffset;
+			
+			switch(Config.position){
+				case Reference.POS_TOP_LEFT:
+					y = ( (strHeight + Config.lineGap) * idx) + y;
+					break;
+				case Reference.POS_TOP_RIGHT:
+					x = width - strWidth - x;
+					y = ( (strHeight + Config.lineGap) * idx) + y;
+					break;
+				case Reference.POS_BOTTOM_LEFT:
+					y = height - (strHeight+Config.lineGap)*(lines-idx) - y;
+					break;
+				case Reference.POS_BOTTOM_RIGHT:
+					x = width - strWidth - x;
+					y = height - (strHeight+Config.lineGap)*(lines-idx) - y;
+					break;
+			}
+			// drawStringWithShadow or drawString => a
+			render.a(text, x, y, 0xFFFFFFFF, true);
+			idx++;
+		}
 	}
 	
 	private Class guiChatClass=null;
-	@SuppressWarnings("unchecked")
-	private boolean drawOnGUI(GuiScreen gui) {
-		if(!Config.notShowInGUI) return true;
-		try{ 
-			if(guiChatClass==null) guiChatClass=Class.forName("beb");
-		}catch(Exception e){ return true; }
-		//有開啟 GUI 的話，除非是開啟對話框視窗，否則一律不繪製
-		if (gui == null)
-			return true;
-		if (guiChatClass.isAssignableFrom(gui.getClass()))// gui instanceof GuiChat
-			return true;
-
-		return false;
+	private Class getGuiChatClass(){
+		if(guiChatClass==null){
+			try{guiChatClass=Class.forName("beb");}
+			catch(Exception e){}
+		}
+		return guiChatClass;
 	}
 	
 	// cache Objects

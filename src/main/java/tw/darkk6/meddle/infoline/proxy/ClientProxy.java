@@ -17,7 +17,7 @@ public class ClientProxy extends CommonProxy {
 	public void init(){
 		Config.instance=new Config(new File(Meddle.getConfigDir(),Reference.MODID+".cfg"));
 		eventhandler=new EventHandler();
-		EventRegister.addRenderTickListener(eventhandler);
+		EventRegister.addRenderOverlayListener(eventhandler);
 		MeddleClient.registerKeyBindStateHandler(eventhandler);
 	}
 }

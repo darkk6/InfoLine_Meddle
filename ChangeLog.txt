@@ -1,0 +1,8 @@
+- v1.1
+	add Coordinate , Light level , Biome info
+	split all features into single mod class ( coding style )
+	use new event api ( ClientEventAPI 1.2 )
+	remove "dont show on gui" option
+
+- v1.0
+	First release , clock info only

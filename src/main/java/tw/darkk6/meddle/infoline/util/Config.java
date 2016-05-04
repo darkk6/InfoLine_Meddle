@@ -3,23 +3,16 @@ package tw.darkk6.meddle.infoline.util;
 import java.io.File;
 
 import net.fybertech.meddleapi.ConfigFile;
+import tw.darkk6.meddle.infoline.InfoLineMod;
 
 public class Config {
-	public static final int TOP_LEFT=0;
-	public static final int TOP_RIGHT=1;
-	public static final int BOTTOM_LEFT=2;
-	public static final int BOTTOM_RIGHT=3;
-	
-	public static final int MC_TIME=0;
-	public static final int MC_TICK=1;
-	public static final int REAL_TIME=2;
 	
 	public static Config instance;
 	
 	public static int position=0;//左上角，參考上面
-	public static int mode=0;//哪種時間
-	public static int xOffset=5,yOffset=5;
-	public static boolean isEnable=true , notShowInGUI=false , useColor=true;
+	public static int xOffset=5,yOffset=5,lineGap=0;
+	public static boolean isEnabled=true;
+	public static String displayString="{clock} {coordinate} {biome}{N}{light}";
 	
 	//=== internal ===
 	public static int[] defaultResolution;
@@ -48,17 +41,16 @@ public class Config {
 		ConfigFile cfg=new ConfigFile(file);
 		cfg.load();
 		
-		isEnable=((Boolean)cfg.get(ConfigFile.key(
-				"general", "enableInfoLine", Boolean.valueOf(isEnable),
+		isEnabled=((Boolean)cfg.get(ConfigFile.key(
+				"general", "enableInfoLine", Boolean.valueOf(isEnabled),
 				"啟用 InfoLine Mod"))).booleanValue();
 		
-		notShowInGUI=((Boolean)cfg.get(ConfigFile.key(
-				"general", "doNotShowWhenGUIOpen", Boolean.valueOf(notShowInGUI),
-				"啟用開啟 GUI 時不要顯示"))).booleanValue();
+		lineGap=((Integer)cfg.get(ConfigFile.key(
+				"general", "lineGap", Integer.valueOf(lineGap),
+				"多行顯示時的行距間隙"))
+				).intValue();
 		
-		useColor=((Boolean)cfg.get(ConfigFile.key(
-				"general", "useColoredText", Boolean.valueOf(useColor),
-				"使用上色文字(晚上白天等顏色不同)"))).booleanValue();
+		if(lineGap>5 || lineGap<0) lineGap=0;
 		
 		position=((Integer)cfg.get(ConfigFile.key(
 				"general", "showPosition", Integer.valueOf(position),
@@ -66,13 +58,6 @@ public class Config {
 				).intValue();
 		
 		if(position<0 || position>3) position=0;
-		
-		mode=((Integer)cfg.get(ConfigFile.key(
-				"general", "showMode", Integer.valueOf(mode),
-				"顯示位置\n0:Minecraft time , 1:Minecraft ticks , 2:Real time"))
-				).intValue();
-		
-		if(mode<0 || mode>2) mode=0;
 		
 		xOffset=((Integer)cfg.get(ConfigFile.key(
 				"general", "OffsetX", Integer.valueOf(xOffset),
@@ -82,6 +67,11 @@ public class Config {
 				"general", "OffsetY", Integer.valueOf(yOffset),
 				"與邊界的垂直距離"))).intValue();
 		
+		displayString=cfg.get(ConfigFile.key(
+				"general","displayString",displayString,
+				"顯示的文字樣板，使用{N}代表換行"));
+		
+		//====== Internal =======
 		defalutWidth=((Integer)cfg.get(ConfigFile.key(
 				"internal", "ScreenWidth", Integer.valueOf(defalutWidth),
 				"無法取得視窗大小時，預設的視窗寬度"))).intValue();
@@ -94,7 +84,12 @@ public class Config {
 		defaultResolution[0]=defalutWidth;
 		defaultResolution[1]=defalutHeight;
 		
-		if(cfg.hasChanged()) cfg.save();
+		//呼叫 InfoLineMod.loadModsWithConfig 載入所有 mod
+		InfoLineMod.loadModsWithConfig(cfg);
+		
+		cfg.save();
+		//if(cfg.hasChanged()) cfg.save();
+		//if(!file.exists()) cfg.save();
 	}
 	
 }
