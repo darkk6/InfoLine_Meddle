@@ -30,6 +30,9 @@ public class Biome extends IModBase {
 
 	private String getBiomeString(){
 		if(!config.isEnabled()) return "";
+		String fmt=config.displayFormat;
+		//格式中沒出現 {B}或{T}就直接結束
+		if(!fmt.matches(".*\\{[BT]\\}.*")) return "";
 		Minecraft mc=Minecraft.getMinecraft();
 		BlockPos pos=Util.getPlayerPos();
 		if(pos==null) return "{Error}";
@@ -39,7 +42,6 @@ public class Biome extends IModBase {
 		boolean canSnow=mc.theWorld.e(pos.down(),false);
 		StringBuilder name=new StringBuilder();
 		float temp=getBiomeNameTempture(pos,name);
-		String fmt=config.displayFormat;
 		if(canSnow){
 			name.insert(0,APILog.TextFormatting.AQUA);
 			name.append(APILog.TextFormatting.RESET);
@@ -53,6 +55,8 @@ public class Biome extends IModBase {
 			tempStr.append(APILog.TextFormatting.YELLOW);
 		}else//>0.95  熱帶 ， 不下雨
 			tempStr.append(APILog.TextFormatting.GOLD);
+		//如果高度在 64 以下，氣溫不會變動，用斜體表示 , 效果不好  算了
+		//if(pos.getY()<64) tempStr.append(APILog.TextFormatting.ITALIC);
 		tempStr.append(String.format("%.02f", temp)).append(APILog.TextFormatting.RESET);
 		
 		return fmt.replaceAll("\\{B\\}",name.toString())

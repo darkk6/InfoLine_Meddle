@@ -32,6 +32,7 @@ public class Light extends IModBase {
 	private String getLightString(){
 		if(!config.isEnabled()) return "";
 		String fmt = config.lightFormat;
+		if(!fmt.matches(".*\\{[BS]\\}.*")) return "";
 		int[] lights = getLightLevel();
 		String[] lightStr=new String[2];
 		lightStr[0] = String.valueOf(lights[0]);

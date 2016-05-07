@@ -32,9 +32,11 @@ public class Coordinate extends IModBase {
 	}
 
 	public String getCoordInChatStr(){
+		String result=config.chatFormat;
+		//格式中沒出現 {X}{Y}{Z}就直接結束
+		if(!result.matches(".*\\{[XYZ]\\}.*")) return null;
 		BlockPos pos = Util.getPlayerPos();
 		if(pos==null) return null;
-		String result=config.chatFormat;
 		result=result.replaceAll("\\{X\\}",String.valueOf(pos.getX()))
 				.replaceAll("\\{Y\\}",String.valueOf(pos.getY()))
 				.replaceAll("\\{Z\\}",String.valueOf(pos.getZ()));
@@ -43,6 +45,9 @@ public class Coordinate extends IModBase {
 	
 	private String getCoordString(){
 		if(!config.isEnabled()) return "";
+		String result=config.displayFormat;
+		//格式中沒出現 {X}{Y}{Z}就直接結束
+		if(!result.matches(".*\\{[XYZF]\\}.*")) return "";
 		BlockPos pos = Util.getPlayerPos();
 		if(pos==null) return "Get playe coordinate error.";
 		String facing="";
@@ -57,7 +62,7 @@ public class Coordinate extends IModBase {
 			posY=posY+y+APILog.TextFormatting.RESET;
 		}else
 			posY=String.valueOf(pos.getY());
-		String result=config.displayFormat;
+		
 		result=result.replaceAll("\\{X\\}",String.valueOf(pos.getX()))
 				.replaceAll("\\{Y\\}",posY)
 				.replaceAll("\\{Z\\}",String.valueOf(pos.getZ()))
