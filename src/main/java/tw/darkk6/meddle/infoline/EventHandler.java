@@ -61,7 +61,8 @@ public class EventHandler implements IRenderOverlayListener,IKeyBindingState{
 		String[] arr=textToDraw.split("\\{[Nn]\\}");
 		drawText(Arrays.asList(arr));
 	}
-
+	
+	
 	private Class classGuiTextField;
 	private Field inputfield;
 	private Method writeText;

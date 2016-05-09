@@ -10,6 +10,7 @@ import tw.darkk6.meddle.api.ClientEventAPI;
 import tw.darkk6.meddle.infoline.mod.Biome;
 import tw.darkk6.meddle.infoline.mod.Clock;
 import tw.darkk6.meddle.infoline.mod.Coordinate;
+import tw.darkk6.meddle.infoline.mod.Health;
 import tw.darkk6.meddle.infoline.mod.IModBase;
 import tw.darkk6.meddle.infoline.mod.Light;
 import tw.darkk6.meddle.infoline.proxy.ClientProxy;
@@ -32,6 +33,7 @@ public class InfoLineMod {
 			modList.add(new Light(cfg));
 			modList.add(new Coordinate(cfg));
 			modList.add(new Biome(cfg));
+			modList.add(new Health(cfg));
 		}else{
 			//已經載入 Mod , 只要更新就好
 			for(IModBase mod:InfoLineMod.modList)

@@ -12,7 +12,7 @@ public class Config {
 	private static final int DEFAULT_POS=0;
 	private static final int DEFAULT_XPOS=5,DEFAULT_YPOS=5,DEFAULT_GAP=0;
 	private static final boolean DEFAULT_ENABLED=true;
-	private static final String DEFAULT_DISPLAY="{clock} {coordinate} {light}{N}{biome}";
+	private static final String DEFAULT_DISPLAY="{clock} {coordinate} {light}{N}{biome}{N}{health}";
 	private static final int DEFALUTWIDTH=854,DEFALUTHEIGHT=480;
 	
 	public static int position=DEFAULT_POS;//左上角，參考上面

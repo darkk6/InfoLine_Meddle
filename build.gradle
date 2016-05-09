@@ -41,7 +41,7 @@ minecraft {
 
 jar {
     baseName = 'InfoLine'
-    version = '1.1'
+    version = '1.2'
     
     manifest {
 		attributes('MeddleAPI-Mods' : 'tw.darkk6.meddle.infoline.InfoLineMod')
