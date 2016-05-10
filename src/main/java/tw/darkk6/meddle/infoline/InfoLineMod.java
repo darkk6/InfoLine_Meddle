@@ -42,7 +42,7 @@ public class InfoLineMod {
 	}
 	
 	public void init(){
-		ClientEventAPI.checkApiVersionWithException("1.2");
+		ClientEventAPI.checkApiVersionWithException("1.3");
 		proxy.init();
 	}
 }

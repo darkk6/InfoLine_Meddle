@@ -1,21 +1,23 @@
 ﻿EventHandler
 	doInTick
 		minecraft.m => minecraft.currentScreen
+		
+	drawText
 		minecraft.k => minecraft.fontRendererObj
-		fontRenderer.a => FontRenderer.FONT_HEIGHT
-		render.a(String,FFD) =>  render.drawStringWithShadow(String,FFD)
-		
-	checkIsF1Pressed
-		getDeclaredField("a") => a : inputField [ in class GuiChat ]
-		Class.forName("bda") => bda : GuiTextField
-		getMethod("b") => b : writeText(String) [ in class GuiTextField ]
-		
+		fontRenderer.a => FontRenderer.FONT_HEIGHT  ( public int = 9)
+		render.a(String,FFIZ) => render.drawString(String,FFI,withShadowZ)  ( render.drawStringWithShadow(String,FFI) )
 		
 	getGuiChatClass
-		Class.forName("beb"); => beb : GuiChat
+		Class.forName("bec"); => bec : GuiChat
+		
+	checkAndInsertCoord
+		getDeclaredField("a") => a : inputField [ protected in class GuiChat ]
+		Class.forName("bdb") => bdb : GuiTextField
+		getMethod("b") => b : writeText(String) [ in class GuiTextField ]
+		
 	
 	getScaledWidthHeight
-		Class.forName("bcu") => bcu : ScaledResolution
+		Class.forName("bcv") => bcv : ScaledResolution
 		getMethod("a"); => a : getScaledWidth(); [ in class ScaledResolution ]
 		getMethod("b"); => b : getScaledHeight(); [ in class ScaledResolution ]
 		
@@ -41,8 +43,8 @@ mod.Health
 	getHealthString
 		minecraft.i => pointedEntity
 		getCommandSenderName() => getName() [ in Entity ]
-		entity.bQ()	=> getHealth() [ in EntityLivingBase ]
-		entity.bW()	=> getMaxHealth() [ in EntityLivingBase ]
+		entity.bR()	=> getHealth() [ in EntityLivingBase ]
+		entity.bX()	=> getMaxHealth() [ in EntityLivingBase ]
 		
 mod.Light
 	getLightLevel

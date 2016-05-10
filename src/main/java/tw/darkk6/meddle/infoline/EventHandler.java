@@ -82,7 +82,7 @@ public class EventHandler implements IRenderOverlayListener,IKeyBindingState{
 		if(xyz==null) return;
 		try{
 			if(inputfield==null) inputfield=guiChatClass.getDeclaredField("a");
-			if(classGuiTextField==null) classGuiTextField=Class.forName("bda");
+			if(classGuiTextField==null) classGuiTextField=Class.forName("bdb");
 			if(writeText==null) writeText=classGuiTextField.getMethod("b",String.class);
 			inputfield.setAccessible(true);
 			Object iptField = inputfield.get(guiChatObj);
@@ -134,7 +134,7 @@ public class EventHandler implements IRenderOverlayListener,IKeyBindingState{
 	private Class guiChatClass=null;
 	private Class getGuiChatClass(){
 		if(guiChatClass==null){
-			try{guiChatClass=Class.forName("beb");}
+			try{guiChatClass=Class.forName("bec");}
 			catch(Exception e){}
 		}
 		return guiChatClass;
@@ -146,7 +146,7 @@ public class EventHandler implements IRenderOverlayListener,IKeyBindingState{
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private int[] getScaledWidthHeight(){
 		try{
-			Class cls=Class.forName("bcu");
+			Class cls=Class.forName("bcv");
 			if(srConstructor==null) srConstructor =cls.getConstructor(Minecraft.class);
 			if(getScaledWidth==null) getScaledWidth=cls.getMethod("a");
 			if(getScaledHeight==null) getScaledHeight=cls.getMethod("b");

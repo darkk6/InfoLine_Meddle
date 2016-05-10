@@ -36,9 +36,9 @@ public class Health extends IModBase {
 		EntityLivingBase entity=(EntityLivingBase)e;
 		// getCommandSenderName => getName in Entity
 		String name = entity.getCommandSenderName();
-		// bQ , bW => getHealth , getMaxHealth in EntityLivingBase
-		int now = (int)Math.ceil(entity.bQ());
-		int max = (int)Math.ceil(entity.bW());
+		// bR , bX => getHealth , getMaxHealth in EntityLivingBase
+		int now = (int)Math.ceil(entity.bR());
+		int max = (int)Math.ceil(entity.bX());
 		return fmt.replaceAll("\\{A\\}",name.toString())
 				.replaceAll("\\{H\\}", String.valueOf(now))
 				.replaceAll("\\{M\\}", String.valueOf(max));
