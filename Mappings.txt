@@ -1,0 +1,64 @@
+﻿EventHandler
+	doInTick
+		minecraft.m => minecraft.currentScreen
+		minecraft.k => minecraft.fontRendererObj
+		fontRenderer.a => FontRenderer.FONT_HEIGHT
+		render.a(String,FFD) =>  render.drawStringWithShadow(String,FFD)
+		
+	checkIsF1Pressed
+		getDeclaredField("a") => a : inputField [ in class GuiChat ]
+		Class.forName("bda") => bda : GuiTextField
+		getMethod("b") => b : writeText(String) [ in class GuiTextField ]
+		
+		
+	getGuiChatClass
+		Class.forName("beb"); => beb : GuiChat
+	
+	getScaledWidthHeight
+		Class.forName("bcu") => bcu : ScaledResolution
+		getMethod("a"); => a : getScaledWidth(); [ in class ScaledResolution ]
+		getMethod("b"); => b : getScaledHeight(); [ in class ScaledResolution ]
+		
+mod.Clock
+	getClockString
+		theWorld.Q() => world.getWorldTime()
+	
+mod.Coordinate
+	getCoordString
+		player.v => .rotationYaw [ in class Entity ]
+
+mod.Biome
+	getBiomeString
+		theWorld.e => theWorld.canSnowAtBody
+		
+	getBiomeNameTempture
+		getMethod("b") => getBiomeGenForCoordsBody [ in class World]
+		Class.forName("aig") => aig : BiomeGenBase
+		getDeclaredField("z") => z : biomeName [private , in class BiomeGenBase ]
+		getMethod("a",BlockPos.class) => getFloatTemperature(BlockPos) [ it's final ]
+		
+mod.Health
+	getHealthString
+		minecraft.i => pointedEntity
+		getCommandSenderName() => getName() [ in Entity ]
+		entity.bQ()	=> getHealth() [ in EntityLivingBase ]
+		entity.bW()	=> getMaxHealth() [ in EntityLivingBase ]
+		
+mod.Light
+	getLightLevel
+		getLightFor(EnumSkyBlock,BloclPos)I => b(ahz type, BlockPos pos)I
+		world.a(F)I => world.calculateSkylightSubtracted(1.0F);
+	
+	getLightFor
+		Class.ForName("ahz") => ahz : EnumSkyBlock
+		getMethod("b") => getLightFor(EnumSkyBlock,BlockPos)I [ in class World ]
+	
+	getEnumSkyBlock
+		getField("a"); => a : SKY(15)
+		getField("b"); => b : BLOCK(0)
+		
+		
+	
+util.Util
+	getPlayerPos
+		thePlayer.posXYZ => p,q,r , in class Entity
