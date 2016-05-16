@@ -8,18 +8,18 @@
 		render.a(String,FFIZ) => render.drawString(String,FFI,withShadowZ)  ( render.drawStringWithShadow(String,FFI) )
 		
 	getGuiChatClass
-		Class.forName("bec"); => bec : GuiChat
+##		Class.forName("bec"); => bec : GuiChat
 		
 	checkAndInsertCoord
-		getDeclaredField("a") => a : inputField [ protected in class GuiChat ]
-		Class.forName("bdb") => bdb : GuiTextField
-		getMethod("b") => b : writeText(String) [ in class GuiTextField ]
+##		getDeclaredField("a") => a : inputField [ protected in class GuiChat ]
+##		Class.forName("bdb") => bdb : GuiTextField
+##		getMethod("b") => b : writeText(String) [ in class GuiTextField ]
 		
 	
 	getScaledWidthHeight
-		Class.forName("bcv") => bcv : ScaledResolution
-		getMethod("a"); => a : getScaledWidth(); [ in class ScaledResolution ]
-		getMethod("b"); => b : getScaledHeight(); [ in class ScaledResolution ]
+##		Class.forName("bcv") => bcv : ScaledResolution
+##		getMethod("a"); => a : getScaledWidth(); [ in class ScaledResolution ]
+##		getMethod("b"); => b : getScaledHeight(); [ in class ScaledResolution ]
 		
 mod.Clock
 	getClockString
@@ -34,10 +34,10 @@ mod.Biome
 		theWorld.e => theWorld.canSnowAtBody
 		
 	getBiomeNameTempture
-		getMethod("b") => getBiomeGenForCoordsBody [ in class World]
-		Class.forName("aig") => aig : BiomeGenBase
-		getDeclaredField("z") => z : biomeName [private , in class BiomeGenBase ]
-		getMethod("a",BlockPos.class) => getFloatTemperature(BlockPos) [ it's final ]
+##		getMethod("b") => getBiomeGenForCoordsBody [ in class World]
+##		Class.forName("aig") => aig : BiomeGenBase
+##		getDeclaredField("z") => z : biomeName [private , in class BiomeGenBase ]
+##		getMethod("a",BlockPos.class) => getFloatTemperature(BlockPos) [ it's final ]
 		
 mod.Health
 	getHealthString
@@ -52,12 +52,12 @@ mod.Light
 		world.a(F)I => world.calculateSkylightSubtracted(1.0F);
 	
 	getLightFor
-		Class.ForName("ahz") => ahz : EnumSkyBlock
-		getMethod("b") => getLightFor(EnumSkyBlock,BlockPos)I [ in class World ]
+##		Class.ForName("ahz") => ahz : EnumSkyBlock
+##		getMethod("b") => getLightFor(EnumSkyBlock,BlockPos)I [ in class World ]
 	
 	getEnumSkyBlock
-		getField("a"); => a : SKY(15)
-		getField("b"); => b : BLOCK(0)
+##		getField("a"); => a : SKY(15)
+##		getField("b"); => b : BLOCK(0)
 		
 		
 	

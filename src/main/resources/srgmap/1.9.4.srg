@@ -1,0 +1,20 @@
+# srgName name
+CL: bec net/minecraft/client/gui/GuiChat
+CL: bdb net/minecraft/client/gui/GuiTextField
+CL: bcv net/minecraft/client/gui/ScaledResolution
+CL: aig net/minecraft/world/biome/BiomeGenBase
+CL: ahz net/minecraft/world/EnumSkyBlock
+
+# srgName owner name descriptor
+MD: b net/minecraft/client/gui/GuiTextField writeText (Ljava/lang/String;)V
+MD: a net/minecraft/client/gui/ScaledResolution getScaledWidth ()I
+MD: b net/minecraft/client/gui/ScaledResolution getScaledHeight ()I
+MD: b net/minecraft/world/World getBiomeGenForCoordsBody (Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/world/biome/BiomeGenBase;
+MD: a net/minecraft/world/biome/BiomeGenBase getFloatTemperature (Lnet/minecraft/util/math/BlockPos;)F
+MD: b net/minecraft/world/World getLightFor (Lnet/minecraft/world/EnumSkyBlock;Lnet/minecraft/util/math/BlockPos;)I
+
+# srgName owner name type
+FD: a net/minecraft/client/gui/GuiChat inputField Lnet/minecraft/client/gui/GuiTextField;
+FD: z net/minecraft/world/biome/BiomeGenBase biomeName Ljava/lang/String;
+FD: a net/minecraft/world/EnumSkyBlock SKY Lnet/minecraft/world/EnumSkyBlock;
+FD: b net/minecraft/world/EnumSkyBlock BLOCK Lnet/minecraft/world/EnumSkyBlock;

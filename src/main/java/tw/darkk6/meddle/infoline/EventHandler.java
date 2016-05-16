@@ -15,10 +15,12 @@ import net.minecraft.client.settings.KeyBinding;
 import org.lwjgl.input.Keyboard;
 
 import tw.darkk6.meddle.api.listener.IRenderOverlayListener;
+import tw.darkk6.meddle.api.srg.SrgMap;
 import tw.darkk6.meddle.api.util.APILog;
 import tw.darkk6.meddle.infoline.mod.Coordinate;
 import tw.darkk6.meddle.infoline.mod.IModBase;
 import tw.darkk6.meddle.infoline.util.Config;
+import tw.darkk6.meddle.infoline.util.NameMap;
 import tw.darkk6.meddle.infoline.util.Reference;
 
 public class EventHandler implements IRenderOverlayListener,IKeyBindingState{
@@ -81,9 +83,9 @@ public class EventHandler implements IRenderOverlayListener,IKeyBindingState{
 		String xyz=Coordinate.instance.getCoordInChatStr();
 		if(xyz==null) return;
 		try{
-			if(inputfield==null) inputfield=guiChatClass.getDeclaredField("a");
-			if(classGuiTextField==null) classGuiTextField=Class.forName("bdb");
-			if(writeText==null) writeText=classGuiTextField.getMethod("b",String.class);
+			if(inputfield==null) inputfield=guiChatClass.getDeclaredField(SrgMap.getFieldName(NameMap.fInputField));
+			if(classGuiTextField==null) classGuiTextField=Class.forName(SrgMap.getClassName(NameMap.clzGuiTextField));
+			if(writeText==null) writeText=classGuiTextField.getMethod(SrgMap.getMethodName(NameMap.mWriteText),String.class);
 			inputfield.setAccessible(true);
 			Object iptField = inputfield.get(guiChatObj);
 			writeText.invoke(iptField,xyz);
@@ -134,7 +136,7 @@ public class EventHandler implements IRenderOverlayListener,IKeyBindingState{
 	private Class guiChatClass=null;
 	private Class getGuiChatClass(){
 		if(guiChatClass==null){
-			try{guiChatClass=Class.forName("bec");}
+			try{guiChatClass=Class.forName(SrgMap.getClassName(NameMap.clzGuiChat));}
 			catch(Exception e){}
 		}
 		return guiChatClass;
@@ -146,10 +148,10 @@ public class EventHandler implements IRenderOverlayListener,IKeyBindingState{
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private int[] getScaledWidthHeight(){
 		try{
-			Class cls=Class.forName("bcv");
+			Class cls=Class.forName(SrgMap.getClassName(NameMap.clzScaledResolution));
 			if(srConstructor==null) srConstructor =cls.getConstructor(Minecraft.class);
-			if(getScaledWidth==null) getScaledWidth=cls.getMethod("a");
-			if(getScaledHeight==null) getScaledHeight=cls.getMethod("b");
+			if(getScaledWidth==null) getScaledWidth=cls.getMethod(SrgMap.getMethodName(NameMap.mGetScaledWidth));
+			if(getScaledHeight==null) getScaledHeight=cls.getMethod(SrgMap.getMethodName(NameMap.mGetScaledHeight));
 			Object srObject = srConstructor.newInstance(Minecraft.getMinecraft());
 			int[] result=new int[2];
 			result[0] = (Integer)getScaledWidth.invoke(srObject);

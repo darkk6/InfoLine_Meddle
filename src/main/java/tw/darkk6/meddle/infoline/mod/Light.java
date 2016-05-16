@@ -8,7 +8,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+import tw.darkk6.meddle.api.srg.SrgMap;
 import tw.darkk6.meddle.api.util.APILog;
+import tw.darkk6.meddle.infoline.util.NameMap;
 import tw.darkk6.meddle.infoline.util.Reference;
 import tw.darkk6.meddle.infoline.util.Util;
 
@@ -78,9 +80,9 @@ public class Light extends IModBase {
 		try{
 			Class w=World.class;
 			if(class_enumskyblock==null)
-				class_enumskyblock=Class.forName("ahz");
+				class_enumskyblock=Class.forName(SrgMap.getClassName(NameMap.clzEnumSkyBlock));
 			if(getLightForMethod==null)
-				getLightForMethod=w.getMethod("b",class_enumskyblock,BlockPos.class);
+				getLightForMethod=w.getMethod(SrgMap.getMethodName(NameMap.mGetLightFor),class_enumskyblock,BlockPos.class);
 			Object skyBlockObj=getEnumSkyBlock(type);
 			if(skyBlockObj==null) return 0;
 			return (Integer)getLightForMethod.invoke(world,skyBlockObj,pos);
@@ -94,9 +96,9 @@ public class Light extends IModBase {
 		try{
 			if(class_enumskyblock==null) throw new RuntimeException("Call getEnumSkyBlock without calling getLightFor");
 			if(FIELD_SKY==null)
-				FIELD_SKY=class_enumskyblock.getField("a");
+				FIELD_SKY=class_enumskyblock.getField(SrgMap.getFieldName(NameMap.fSKY));
 			if(FIELD_BLOCK==null)
-				FIELD_BLOCK=class_enumskyblock.getField("b");
+				FIELD_BLOCK=class_enumskyblock.getField(SrgMap.getFieldName(NameMap.fBLOCK));
 			if(type==ENUMSKYBLOCK_SKY) return FIELD_SKY.get(null);
 			else if(type==ENUMSKYBLOCK_BLOCK) return FIELD_BLOCK.get(null);
 		}catch(Exception e){

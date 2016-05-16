@@ -7,7 +7,9 @@ import net.fybertech.meddleapi.ConfigFile;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+import tw.darkk6.meddle.api.srg.SrgMap;
 import tw.darkk6.meddle.api.util.APILog;
+import tw.darkk6.meddle.infoline.util.NameMap;
 import tw.darkk6.meddle.infoline.util.Util;
 
 public class Biome extends IModBase {
@@ -80,22 +82,22 @@ public class Biome extends IModBase {
 			if(getBiomeGenForCoordsBody==null){
 				// Meddle 無法找到 .b() 這個 method , 自己來
 				// b(final BlockPos) => getBiomeGenForCoordsBody()
-				getBiomeGenForCoordsBody=World.class.getMethod("b",BlockPos.class);
+				getBiomeGenForCoordsBody=World.class.getMethod(SrgMap.getMethodName(NameMap.mGetBiomeGenForCoordsBody),BlockPos.class);
 			}
 			Object biomeObject=getBiomeGenForCoordsBody.invoke(
 					Minecraft.getMinecraft().theWorld, pos64);
 			
 			// aig => BiomeGenBase
-			if(cBiomeGenBase==null) cBiomeGenBase=Class.forName("aig");
+			if(cBiomeGenBase==null) cBiomeGenBase=Class.forName(SrgMap.getClassName(NameMap.clzBiomeGenBase));
 			// z => biomeName , is private
-			if(fBiomeName==null) fBiomeName=cBiomeGenBase.getDeclaredField("z");
+			if(fBiomeName==null) fBiomeName=cBiomeGenBase.getDeclaredField(SrgMap.getFieldName(NameMap.fBiomeName));
 			fBiomeName.setAccessible(true);
 			//取得名字完畢
 			name.append(fBiomeName.get(biomeObject).toString());
 			//取得溫度
 			// a => getFloatTemperature(BlockPos) , final
 			if(getFloatTemperature==null)
-				getFloatTemperature=cBiomeGenBase.getMethod("a",BlockPos.class);
+				getFloatTemperature=cBiomeGenBase.getMethod(SrgMap.getMethodName(NameMap.mGetFloatTemperature),BlockPos.class);
 			return (Float)getFloatTemperature.invoke(biomeObject, playerPos);
 		}catch(Exception e){
 			name.append("Unknown");
